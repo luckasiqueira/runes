@@ -1,5 +1,7 @@
 package database
 
+import "log"
+
 /*
 Struct for each champion
 */
@@ -45,7 +47,37 @@ type Draws struct {
 }
 
 /*
-Salvando em um ponteiro de struct todos os campeões cadastrados no banco de dados
+Saving in a struct pointer all champions from DB
+*/
 var c = ListChampions()
 var ChampionsList *[]Draws = &c
+
+/*
+ListChampions connects to DB and get all champion's info, saving it onto ChampionsList, to reduce new DB connections, and improve comparison speed
 */
+func ListChampions() []Draws {
+	db := Connect()
+	rows, err := db.Query("SELECT * FROM`lol_Champions`")
+	if err != nil {
+		log.Fatal("ListChampions() -> error while getting all champions info from DB")
+	}
+	var championsList []Draws
+	for rows.Next() {
+		eachChampion := Draws{}
+		rows.Scan(
+			&eachChampion.Champion.ID,
+			&eachChampion.Champion.Name,
+			&eachChampion.Champion.Gender,
+			&eachChampion.Champion.Role,
+			&eachChampion.Champion.Race,
+			&eachChampion.Champion.Resource,
+			&eachChampion.Champion.Range,
+			&eachChampion.Champion.Region,
+			&eachChampion.Champion.Release,
+			&eachChampion.Champion.Avatar,
+		)
+		championsList = append(championsList, eachChampion)
+	}
+	defer db.Close()
+	return championsList
+}
