@@ -24,7 +24,7 @@ func main() {
 	routes.Router(&route.RouterGroup)
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("main -> error while loading env file")
+		log.Fatal("main -> error while loading .env file")
 	}
 	port := os.Getenv("SV_PORT")
 	err = route.Run(port)
