@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"runes/cmd/runes/game-modes/dle"
 	"runes/cmd/runes/routes"
 )
 
@@ -19,6 +20,7 @@ Run ... dah...
 */
 func main() {
 	route := gin.Default()
+	dle.DraftDailyChampion()
 	route.LoadHTMLGlob("website/*html")
 	route.StaticFS("/assets/", http.Dir("website/assets"))
 	routes.Router(&route.RouterGroup)
