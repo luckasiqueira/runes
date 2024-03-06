@@ -20,8 +20,7 @@ func PlayDLE(context *gin.Context, draw string) {
 	var champion database.ChampionLOL
 	table := database.SetTable(context)
 	if context.Request.URL.Path == "/try/guess/"+gameID {
-		dailyDraw()
-		champion = *(dailyChampion)
+
 	} else if context.Request.URL.Path == "/try/mayhem/"+gameID {
 		championID = database.CheckGameChampion(gameID, table)
 	}
@@ -32,12 +31,18 @@ func PlayDLE(context *gin.Context, draw string) {
 dailyDraw runs every 00:00 (here, set as 12), when it Draws a new champion from DB and saves onto dailyChampion pointer
 This pointer will be used to compare user shots fast, since no DB comparision will be needed
 */
-func draftDailyChampion() {
+func DraftDailyChampion() {
 	cronCycle := "* * * * *"
 	job := cron.New()
 	job.AddFunc(cronCycle, func() {
 		c := database.DrawChampion()
-		dailyChampion = &c
+		database.SaveDailyChampion(c.ID)
+		for i := range *database.ChampionsList {
+			if c.ID == (*database.ChampionsList)[i].Champion.ID {
+				dailyChampion = &c
+				break
+			}
+		}
 	})
 	job.Start()
 	job.Run()
