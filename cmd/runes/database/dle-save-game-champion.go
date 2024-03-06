@@ -5,7 +5,7 @@ import "log"
 /*
 saveDailyChampion connects to DB and updates the championID with the new one generated today
 */
-func saveDailyChampion(championID int) {
+func SaveDailyChampion(championID int) {
 	db := Connect()
 	_, err := db.Exec("UPDATE `lol_Game_DailyChampion` SET `ID`='1',`ChampionID`=?;", championID)
 	if err != nil {
