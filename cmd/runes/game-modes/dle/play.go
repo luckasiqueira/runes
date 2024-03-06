@@ -1,6 +1,8 @@
 package dle
 
 import (
+	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/robfig/cron/v3"
 	"runes/cmd/runes/database"
 )
@@ -9,8 +11,16 @@ var dailyChampion *database.ChampionLOL
 
 /*
  */
-func PlayGuess() {
-	dailyDraw()
+func PlayDLE(context *gin.Context, draw string) {
+	gameID := context.Param("gameID")
+	var champion database.ChampionLOL
+	if context.Request.URL.Path == "/try/guess/"+gameID {
+		dailyDraw()
+		champion = *dailyChampion
+	} else if context.Request.URL.Path == "/try/mayhem/"+gameID {
+
+	}
+	fmt.Println(champion)
 }
 
 /*
@@ -26,8 +36,4 @@ func dailyDraw() {
 	})
 	job.Start()
 	job.Run()
-}
-
-func PlayMayhem() {
-
 }
