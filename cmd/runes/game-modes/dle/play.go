@@ -20,7 +20,7 @@ func PlayDLE(context *gin.Context, draw string) {
 	var champion database.ChampionLOL
 	table := database.SetTable(context)
 	if context.Request.URL.Path == "/try/guess/"+gameID {
-
+		championID = (*dailyChampion).ID
 	} else if context.Request.URL.Path == "/try/mayhem/"+gameID {
 		championID = database.CheckGameChampion(gameID, table)
 	}
