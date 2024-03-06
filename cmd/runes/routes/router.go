@@ -20,7 +20,7 @@ func Router(route *gin.RouterGroup) {
 	}
 	try := route.Group("/try")
 	{
-		try.POST("/guess/:gameID")
-		try.POST("/mayhem/:gameID")
+		try.POST("/guess/:gameID", controller.DLEDraws)
+		try.POST("/mayhem/:gameID", controller.DLEDraws)
 	}
 }
