@@ -5,6 +5,9 @@ import (
 	"log"
 )
 
+/*
+CheckGameChampion looks on DB to verify what champion ID is set for the  given gameID and returns a INT
+*/
 func CheckGameChampion(gameID, table string) int {
 	db := Connect()
 	var championID int

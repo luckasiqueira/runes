@@ -53,7 +53,8 @@ var c = ListChampions()
 var ChampionsList *[]Draws = &c
 
 /*
-ListChampions connects to DB and get all champion's info, saving it onto ChampionsList, to reduce new DB connections, and improve comparison speed
+ListChampions connects to DB and get all champion's info, saving it onto ChampionsList
+This approach can reduce new DB connections, and improve comparison speed
 */
 func ListChampions() []Draws {
 	db := Connect()
