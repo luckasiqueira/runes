@@ -24,7 +24,7 @@ func CheckGameChampion(gameID, table string) int {
 /*
 CheckChampionNameByID
 */
-func CheckChampionNameByID(draw string) int {
+func CheckChampionID(draw string) int {
 	db := Connect()
 	var drawChampionID int
 	err := db.QueryRow("SELECT `ID` FROM `lol_Champions` WHERE NAME LIKE ?;", draw).Scan(&drawChampionID)
