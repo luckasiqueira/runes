@@ -7,7 +7,8 @@ import (
 	"runes/cmd/runes/database"
 )
 
-var dailyChampion *database.ChampionLOL
+var c = database.DrawChampion()
+var dailyChampion *database.ChampionLOL = &c
 
 /*
 PlayDLE is where game starts, implementing some initial evaluations
@@ -24,7 +25,7 @@ func PlayDLE(context *gin.Context, draw string) {
 	} else if context.Request.URL.Path == "/try/mayhem/"+gameID {
 		championID = database.CheckGameChampion(gameID, table)
 	}
-	fmt.Sprint(championID, champion)
+	fmt.Print(championID, champion)
 	fmt.Println(draw)
 }
 
@@ -36,7 +37,7 @@ func DraftDailyChampion() {
 	cronCycle := "0 0 * * *"
 	job := cron.New()
 	job.AddFunc(cronCycle, func() {
-		c := database.DrawChampion()
+		c = database.DrawChampion()
 		database.SaveDailyChampion(c.ID)
 		for i := range *database.ChampionsList {
 			if c.ID == (*database.ChampionsList)[i].Champion.ID {
