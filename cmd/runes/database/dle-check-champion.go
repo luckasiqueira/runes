@@ -2,7 +2,9 @@ package database
 
 import (
 	"fmt"
+	"github.com/joho/godotenv"
 	"log"
+	"os"
 )
 
 /*
@@ -20,7 +22,8 @@ func CheckGameChampion(gameID, table string) int {
 }
 
 /*
- */
+CheckChampionNameByID
+*/
 func CheckChampionNameByID(draw string) int {
 	db := Connect()
 	var drawChampionID int
@@ -30,4 +33,30 @@ func CheckChampionNameByID(draw string) int {
 	}
 	defer db.Close()
 	return drawChampionID
+}
+
+/*
+CheckDailyChampion will connect to DB in order to get the already defined championID
+That function is only called once, to set the initial value for the dailyChampion pointer
+*/
+func CheckDailyChampion() ChampionLOL {
+	db := Connect()
+	var champion ChampionLOL
+	var dailyChampionID int
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("CheckDailyChampion() -> error while loading .env file")
+	}
+	table := os.Getenv("TB_GUESS_CHAMPION")
+	err = db.QueryRow(fmt.Sprintf("SELECT `championID` FROM %s WHERE 1;", table)).Scan(&dailyChampionID)
+	if err != nil {
+		log.Fatal("CheckDailyChampion() -> error while checking daily champion")
+	}
+	for i := range *ChampionsList {
+		if dailyChampionID == (*ChampionsList)[i].Champion.ID {
+			champion = (*ChampionsList)[i].Champion
+		}
+	}
+	defer db.Close()
+	return champion
 }
