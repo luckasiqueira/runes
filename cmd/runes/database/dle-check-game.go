@@ -18,3 +18,16 @@ func CheckGameChampion(gameID, table string) int {
 	defer db.Close()
 	return championID
 }
+
+/*
+ */
+func CheckChampionNameByID(draw string) int {
+	db := Connect()
+	var drawChampionID int
+	err := db.QueryRow("SELECT `ID` FROM `lol_Champions` WHERE NAME LIKE ?;", draw).Scan(&drawChampionID)
+	if err != nil {
+		log.Fatal("CheckChampionNameByID() -> error while checking ID for the given champion name")
+	}
+	defer db.Close()
+	return drawChampionID
+}
