@@ -1,7 +1,6 @@
 package dle
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/robfig/cron/v3"
 	"runes/cmd/runes/database"
@@ -25,8 +24,16 @@ func PlayDLE(context *gin.Context, draw string) {
 	} else if context.Request.URL.Path == "/try/mayhem/"+gameID {
 		championID = database.CheckGameChampion(gameID, table)
 	}
-	fmt.Print(championID, champion)
-	fmt.Println(draw)
+	drawChampionID := database.CheckChampionNameByID(draw)
+	compare(championID, drawChampionID, champion)
+}
+
+func compare(championID, drawChampionID int, champion database.ChampionLOL) {
+	if drawChampionID == championID {
+		// Win
+	} else {
+		// Evaluate
+	}
 }
 
 /*
