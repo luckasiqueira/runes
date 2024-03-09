@@ -22,17 +22,23 @@ func CheckGameChampion(gameID, table string) int {
 }
 
 /*
-CheckChampionNameByID
+CheckChampionDrawed
 */
-func CheckChampionID(draw string) int {
+func CheckChampionDrawed(draw string) ChampionLOL {
 	db := Connect()
 	var drawChampionID int
+	var drawChampion ChampionLOL
 	err := db.QueryRow("SELECT `ID` FROM `lol_Champions` WHERE NAME LIKE ?;", draw).Scan(&drawChampionID)
 	if err != nil {
 		log.Fatal("CheckChampionNameByID() -> error while checking ID for the given champion name")
 	}
+	for i := range *ChampionsList {
+		if drawChampionID == (*ChampionsList)[i].Champion.ID {
+			drawChampion = (*ChampionsList)[i].Champion
+		}
+	}
 	defer db.Close()
-	return drawChampionID
+	return drawChampion
 }
 
 /*

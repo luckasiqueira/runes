@@ -1,12 +1,13 @@
 package dle
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/robfig/cron/v3"
 	"runes/cmd/runes/database"
 )
 
-var c = database.DrawChampion()
+var c = database.CheckDailyChampion()
 var dailyChampion *database.ChampionLOL = &c
 
 /*
@@ -22,22 +23,23 @@ func PlayDLE(context *gin.Context, draw string) {
 	if context.Request.URL.Path == "/try/guess/"+gameID {
 		championID = (*dailyChampion).ID
 	} else if context.Request.URL.Path == "/try/mayhem/"+gameID {
+		DraftDailyChampion()
 		championID = database.CheckGameChampion(gameID, table)
 	}
-	drawChampionID := database.CheckChampionNameByID(draw)
-	compare(championID, drawChampionID, champion)
+	drawChampion := database.CheckChampionDrawed(draw)
+	compare(championID, drawChampion, champion)
 }
 
-func compare(championID, drawChampionID int, champion database.ChampionLOL) {
-	if drawChampionID == championID {
-		// Win
+func compare(championID int, drawChampion, champion database.ChampionLOL) {
+	if drawChampion.ID == championID {
+		fmt.Println("WIN")
 	} else {
-		// Evaluate
+		fmt.Println("NOP")
 	}
 }
 
 /*
-dailyDraw runs every 00:00 (here, set as 12), when it Draws a new champion from DB and saves onto dailyChampion pointer
+dailyDraw runs every 00:00h (here, set as 12), when it Draws a new champion from DB and saves onto dailyChampion pointer
 This pointer will be used to compare user shots fast, since no DB comparision will be needed
 */
 func DraftDailyChampion() {
