@@ -18,7 +18,7 @@ dailyDraw is executed if game mode is "guess" and user must guess champion set o
 func PlayDLE(context *gin.Context, draw string) {
 	gameID := context.Param("gameID")
 	var championID int
-	var champion database.ChampionLOL
+	//var gameDraws database.Draws
 	table := database.SetTable(context)
 	var playingMode string
 	if context.Request.URL.Path == "/try/guess/"+gameID {
@@ -30,8 +30,24 @@ func PlayDLE(context *gin.Context, draw string) {
 		playingMode = "Mayhem"
 	}
 	drawChampion := database.CheckChampionDrawed(draw)
+	champion := matchChampion(championID)
 	compare(championID, drawChampion, champion)
 	go database.SaveDraw(gameID, playingMode, drawChampion.ID)
+}
+
+/*
+matchChampion gets the given championID and loops over ChampionsList, trying to match this ID with a defined champion
+Once a champion is found, it's saved and returned by 'champion' var
+*/
+func matchChampion(championID int) database.ChampionLOL {
+	var champion database.ChampionLOL
+	for i := range *database.ChampionsList {
+		if championID == (*database.ChampionsList)[i].Champion.ID {
+			champion = (*database.ChampionsList)[i].Champion
+			break
+		}
+	}
+	return champion
 }
 
 /*
