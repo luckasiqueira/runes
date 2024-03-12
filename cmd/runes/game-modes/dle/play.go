@@ -25,7 +25,6 @@ func PlayDLE(context *gin.Context, draw string) {
 		championID = (*dailyChampion).ID
 		playingMode = "Guess"
 	} else if context.Request.URL.Path == "/try/mayhem/"+gameID {
-		DraftDailyChampion()
 		championID = database.CheckGameChampion(gameID, table)
 		playingMode = "Mayhem"
 	}
@@ -65,7 +64,7 @@ func compare(championID int, drawChampion, champion database.ChampionLOL) {
 }
 
 /*
-dailyDraw runs every 00:00h (here, set as 12), when it Draws a new champion from DB and saves onto dailyChampion pointer
+DraftDailyChampion runs every 00:00h (here, set as 12), when it Draws a new champion from DB and saves onto dailyChampion pointer
 This pointer will be used to compare user shots fast, since no DB comparision will be needed
 */
 func DraftDailyChampion() {
