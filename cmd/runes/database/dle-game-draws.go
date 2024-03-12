@@ -34,6 +34,31 @@ func SaveDraw(gameID, playingMode string, championID int) {
 	defer db.Close()
 }
 
-func CheckDraws() {
-
+/*
+CheckDraws opens a db connection and looks for each draw for the given gameID
+For each found draw, performs a loop over ChampionsList,
+where an instance of gameDraw (from type Draw) is set for every found champion that corresponds to the found championID
+*/
+func CheckDraws(gameID, playingMode string) []Draws {
+	var gameDraws []Draws
+	table := setTable(playingMode)
+	db := Connect()
+	rows, err := db.Query(fmt.Sprintf("SELECT `draw` FROM `%s` WHERE `gameID` = '%s';", table, gameID))
+	if err != nil {
+		log.Fatal("CheckDraws -> error while list all gameDraws")
+	}
+	for rows.Next() {
+		var gameDraw Draws
+		var championID int
+		rows.Scan(&championID)
+		for i := range *ChampionsList {
+			if championID == (*ChampionsList)[i].Champion.ID {
+				gameDraw = (*ChampionsList)[i]
+				gameDraws = append(gameDraws, gameDraw)
+				break
+			}
+		}
+	}
+	defer db.Close()
+	return gameDraws
 }
