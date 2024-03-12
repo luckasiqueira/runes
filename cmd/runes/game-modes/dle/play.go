@@ -20,21 +20,31 @@ func PlayDLE(context *gin.Context, draw string) {
 	var championID int
 	var champion database.ChampionLOL
 	table := database.SetTable(context)
+	var playingMode string
 	if context.Request.URL.Path == "/try/guess/"+gameID {
 		championID = (*dailyChampion).ID
+		playingMode = "Guess"
 	} else if context.Request.URL.Path == "/try/mayhem/"+gameID {
 		DraftDailyChampion()
 		championID = database.CheckGameChampion(gameID, table)
+		playingMode = "Mayhem"
 	}
 	drawChampion := database.CheckChampionDrawed(draw)
 	compare(championID, drawChampion, champion)
+	go database.SaveDraw(gameID, playingMode, drawChampion.ID)
 }
 
+/*
+compare compares all characteristics for the given champion drawed with the defined champion for this game.
+If a characteristic is correct, it will set a Status as true, which will be used to indicate to player if that shot is correct, partially correct or wrong.
+*/
 func compare(championID int, drawChampion, champion database.ChampionLOL) {
 	if drawChampion.ID == championID {
 		fmt.Println("WIN")
 	} else {
-		fmt.Println("NOP")
+		if drawChampion.Gender == champion.Gender {
+			//
+		}
 	}
 }
 
