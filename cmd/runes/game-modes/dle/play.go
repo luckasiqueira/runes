@@ -3,6 +3,7 @@ package dle
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/robfig/cron/v3"
+	"math/rand"
 	"net/http"
 	"runes/cmd/runes/database"
 	"strings"
@@ -121,6 +122,14 @@ func isContained(d, c string) bool {
 }
 
 /*
+ */
+func DraftChampion() database.ChampionLOL {
+	i := rand.Intn(len((*database.ChampionsList)))
+	champion := (*database.ChampionsList)[i].Champion
+	return champion
+}
+
+/*
 DraftDailyChampion runs every 00:00h (here, set as 12), when it Draws a new champion from DB and saves onto dailyChampion pointer
 This pointer will be used to compare user shots fast, since no DB comparision will be needed
 */
@@ -128,7 +137,7 @@ func DraftDailyChampion() {
 	cronCycle := "0 0 * * *"
 	job := cron.New()
 	job.AddFunc(cronCycle, func() {
-		c = database.DrawChampion()
+		c = DraftChampion()
 		database.SaveDailyChampion(c.ID)
 		for i := range *database.ChampionsList {
 			if c.ID == (*database.ChampionsList)[i].Champion.ID {

@@ -13,7 +13,7 @@ Draw our champion and save this game onto DB
 */
 func MayhemDrawChampion(context *gin.Context) {
 	gameID := context.Param("gameID")
-	champion := database.DrawChampion()
+	champion := dle.DraftChampion()
 	database.SaveGame(context, gameID, champion.ID)
 	context.Next()
 }
