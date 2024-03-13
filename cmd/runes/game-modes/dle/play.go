@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/robfig/cron/v3"
+	"net/http"
 	"runes/cmd/runes/database"
 	"strings"
 )
@@ -20,6 +21,7 @@ func PlayDLE(context *gin.Context, draw string) {
 	gameID := context.Param("gameID")
 	var championID int
 	var gameDraw database.Draws
+	var gameDraws []database.Draws
 	table := database.SetTable(context)
 	var playingMode string
 	if context.Request.URL.Path == "/try/guess/"+gameID {
@@ -33,6 +35,10 @@ func PlayDLE(context *gin.Context, draw string) {
 	gameDraw.Champion = drawChampion
 	champion := findChampion(championID)
 	gameDraw = compare(championID, drawChampion, champion, gameDraw)
+	gameDraws = append(gameDraws, gameDraw)
+	context.HTML(http.StatusOK, "dle-dynamics.html", gin.H{
+		"Draws": gameDraws,
+	})
 	go database.SaveDraw(gameID, playingMode, drawChampion.ID)
 }
 
