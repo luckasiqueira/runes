@@ -21,8 +21,8 @@ func PlayDLE(context *gin.Context, draw string) {
 	var championID int
 	var gameDraw database.Draws
 	var gameDraws []database.Draws
-	table := database.SetTable(context)
 	var playingMode string
+	table := database.SetTable(context)
 	if context.Request.URL.Path == "/try/guess/"+gameID {
 		championID = (*dailyChampion).ID
 		playingMode = "guess"
@@ -32,7 +32,7 @@ func PlayDLE(context *gin.Context, draw string) {
 	}
 	drawChampion := database.CheckChampionDrawed(draw)
 	gameDraw.Champion = drawChampion
-	champion := findChampion(championID)
+	champion := FindChampion(championID)
 	gameDraw = Compare(drawChampion, champion, gameDraw)
 	gameDraws = append(gameDraws, gameDraw)
 	context.HTML(http.StatusOK, "dle-dynamics.html", gin.H{
@@ -42,10 +42,10 @@ func PlayDLE(context *gin.Context, draw string) {
 }
 
 /*
-findChampion gets the given championID and loops over ChampionsList, trying to match this ID with a defined champion
+FindChampion gets the given championID and loops over ChampionsList, trying to match this ID with a defined champion
 Once a champion is found, it's saved and returned by 'champion' var
 */
-func findChampion(championID int) database.ChampionLOL {
+func FindChampion(championID int) database.ChampionLOL {
 	var champion database.ChampionLOL
 	for i := range *database.ChampionsList {
 		if championID == (*database.ChampionsList)[i].Champion.ID {
@@ -57,7 +57,7 @@ func findChampion(championID int) database.ChampionLOL {
 }
 
 /*
-compare compares all characteristics for the given champion drawed with the defined champion for this game.
+Compare compares all characteristics for the given champion drawed with the defined champion for this game.
 If a characteristic is correct, it will set a Status as true, which will be used to indicate to player if that shot is correct, partially correct or wrong.
 */
 func Compare(drawChampion, champion database.ChampionLOL, gameDraw database.Draws) database.Draws {
