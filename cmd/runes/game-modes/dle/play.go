@@ -33,7 +33,7 @@ func PlayDLE(context *gin.Context, draw string) {
 	drawChampion := database.CheckChampionDrawed(draw)
 	gameDraw.Champion = drawChampion
 	champion := findChampion(championID)
-	gameDraw = compare(championID, drawChampion, champion, gameDraw)
+	gameDraw = compare(drawChampion, champion, gameDraw)
 	gameDraws = append(gameDraws, gameDraw)
 	context.HTML(http.StatusOK, "dle-dynamics.html", gin.H{
 		"Draws": gameDraws,
@@ -60,8 +60,8 @@ func findChampion(championID int) database.ChampionLOL {
 compare compares all characteristics for the given champion drawed with the defined champion for this game.
 If a characteristic is correct, it will set a Status as true, which will be used to indicate to player if that shot is correct, partially correct or wrong.
 */
-func compare(championID int, drawChampion, champion database.ChampionLOL, gameDraw database.Draws) database.Draws {
-	if drawChampion.ID == championID {
+func compare(drawChampion, champion database.ChampionLOL, gameDraw database.Draws) database.Draws {
+	if drawChampion.Name == champion.Name {
 		gameDraw.Won = true
 	} else {
 		if drawChampion.Gender == champion.Gender {
