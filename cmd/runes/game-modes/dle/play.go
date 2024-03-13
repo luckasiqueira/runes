@@ -9,7 +9,7 @@ import (
 )
 
 var c = database.CheckDailyChampion()
-var dailyChampion *database.ChampionLOL = &c
+var DailyChampion *database.ChampionLOL = &c
 
 /*
 PlayDLE is where game starts, implementing some initial evaluations
@@ -24,7 +24,7 @@ func PlayDLE(context *gin.Context, draw string) {
 	var playingMode string
 	table := database.SetTable(context)
 	if context.Request.URL.Path == "/try/guess/"+gameID {
-		championID = (*dailyChampion).ID
+		championID = (*DailyChampion).ID
 		playingMode = "guess"
 	} else if context.Request.URL.Path == "/try/mayhem/"+gameID {
 		championID = database.CheckGameChampion(gameID, table)
@@ -129,7 +129,7 @@ func DraftDailyChampion() {
 		database.SaveDailyChampion(c.ID)
 		for i := range *database.ChampionsList {
 			if c.ID == (*database.ChampionsList)[i].Champion.ID {
-				dailyChampion = &c
+				DailyChampion = &c
 				break
 			}
 		}
