@@ -43,7 +43,7 @@ func CheckDraws(gameID, playingMode string) []Draws {
 	var gameDraws []Draws
 	table := setTable(playingMode)
 	db := Connect()
-	rows, err := db.Query(fmt.Sprintf("SELECT `draw` FROM `%s` WHERE `gameID` = '%s';", table, gameID))
+	rows, err := db.Query(fmt.Sprintf("SELECT `draw` FROM `%s` WHERE `gameID` = '%s' ORDER BY `id` DESC;", table, gameID))
 	if err != nil {
 		log.Fatal("CheckDraws -> error while list all gameDraws")
 	}
