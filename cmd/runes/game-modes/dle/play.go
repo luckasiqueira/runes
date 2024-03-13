@@ -1,7 +1,6 @@
 package dle
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/robfig/cron/v3"
 	"net/http"
@@ -26,10 +25,10 @@ func PlayDLE(context *gin.Context, draw string) {
 	var playingMode string
 	if context.Request.URL.Path == "/try/guess/"+gameID {
 		championID = (*dailyChampion).ID
-		playingMode = "Guess"
+		playingMode = "guess"
 	} else if context.Request.URL.Path == "/try/mayhem/"+gameID {
 		championID = database.CheckGameChampion(gameID, table)
-		playingMode = "Mayhem"
+		playingMode = "mayhem"
 	}
 	drawChampion := database.CheckChampionDrawed(draw)
 	gameDraw.Champion = drawChampion
@@ -63,7 +62,7 @@ If a characteristic is correct, it will set a Status as true, which will be used
 */
 func compare(championID int, drawChampion, champion database.ChampionLOL, gameDraw database.Draws) database.Draws {
 	if drawChampion.ID == championID {
-		fmt.Println("WIN")
+		gameDraw.Won = true
 	} else {
 		if drawChampion.Gender == champion.Gender {
 			gameDraw.Status.GenderFound = true

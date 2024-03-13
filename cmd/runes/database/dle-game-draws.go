@@ -13,9 +13,9 @@ func setTable(playingMode string) string {
 		log.Fatal("setTable() -> error while loading .env file")
 	}
 	var table string
-	if playingMode == "Guess" {
+	if playingMode == "guess" {
 		table = os.Getenv("TB_GUESS_DRAWS")
-	} else if playingMode == "Mayhem" {
+	} else if playingMode == "mayhem" {
 		table = os.Getenv("TB_MAYHEM_DRAWS")
 	}
 	return table
