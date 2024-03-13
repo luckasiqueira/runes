@@ -1,13 +1,9 @@
 package database
 
-import (
-	"log"
-)
-
 /*
 Connect onto Database to select a random champiom and atributes it to championSelect,
 which is a instance of ChampionLOL struct
-*/
+
 func DrawChampion() ChampionLOL {
 	db := Connect()
 	var championSelected ChampionLOL
@@ -28,3 +24,4 @@ func DrawChampion() ChampionLOL {
 	defer db.Close()
 	return championSelected
 }
+*/
