@@ -59,6 +59,9 @@ func FindChampion(championID int) database.ChampionLOL {
 /*
 Compare compares all characteristics for the given champion drawed with the defined champion for this game.
 If a characteristic is correct, it will set a Status as true, which will be used to indicate to player if that shot is correct, partially correct or wrong.
+drawChampion must be the try
+champion is the set champion for this game
+gameDraw is the collection of information, including Status and Champion info
 */
 func Compare(drawChampion, champion database.ChampionLOL, gameDraw database.Draws) database.Draws {
 	if drawChampion.Name == champion.Name {
