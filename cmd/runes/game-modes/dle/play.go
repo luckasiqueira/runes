@@ -108,8 +108,8 @@ isContained evaluates characteristics for both champions (user given and game se
 func isContained(d, c string) bool {
 	draw := strings.Split(strings.ToUpper(d), ", ")
 	champion := strings.Split(strings.ToUpper(c), ", ")
-	for wordA := range draw {
-		for wordB := range champion {
+	for _, wordA := range draw {
+		for _, wordB := range champion {
 			if wordA == wordB {
 				return true
 			}
