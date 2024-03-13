@@ -95,9 +95,9 @@ func Compare(drawChampion, champion database.ChampionLOL, gameDraw database.Draw
 		}
 		if drawChampion.Release == champion.Release {
 			gameDraw.Status.ReleaseFound = true
-		} else if drawChampion.Release > champion.Release {
-			gameDraw.Status.ReleaseUp = true
 		} else if drawChampion.Release < champion.Release {
+			gameDraw.Status.ReleaseUp = true
+		} else if drawChampion.Release > champion.Release {
 			gameDraw.Status.ReleaseDown = true
 		}
 	}
