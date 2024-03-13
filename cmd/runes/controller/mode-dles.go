@@ -41,7 +41,3 @@ func DLEs(context *gin.Context) {
 		"Draws":  gameDraws,
 	})
 }
-
-func Mayhem(context *gin.Context) {
-
-}
