@@ -12,7 +12,7 @@ import (
 /*
 SaveGame connects to DB to insert gameID and gameChampion (ChampionID) on it if it's not set already as evaluated in checkGameIsSet
 */
-func SaveGame(context *gin.Context, gameID string) {
+func SaveGame(context *gin.Context, gameID string, championID int) {
 	db := Connect()
 	err := godotenv.Load()
 	if err != nil {
@@ -27,7 +27,7 @@ func SaveGame(context *gin.Context, gameID string) {
 	if checkGameIsSet(db, gameID, table) {
 		return
 	} else {
-		_, errr := db.Exec(fmt.Sprintf("INSERT INTO %s (`gameID`, `ChampionID`) VALUES (?, '55');", table), gameID)
+		_, errr := db.Exec(fmt.Sprintf("INSERT INTO %s (`gameID`, `ChampionID`) VALUES (?, ?);", table), gameID, championID)
 		if errr != nil {
 			log.Fatal("SaveGame() -> Error while saving gameID on DB")
 		}
