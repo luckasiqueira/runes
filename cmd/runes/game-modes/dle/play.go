@@ -33,7 +33,6 @@ func PlayDLE(context *gin.Context, draw string) {
 	gameDraw.Champion = drawChampion
 	champion := findChampion(championID)
 	gameDraw = compare(championID, drawChampion, champion, gameDraw)
-	fmt.Println(gameDraw)
 	go database.SaveDraw(gameID, playingMode, drawChampion.ID)
 }
 
