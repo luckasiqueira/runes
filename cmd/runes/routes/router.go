@@ -14,7 +14,7 @@ func Router(route *gin.RouterGroup) {
 	play := route.Group("/play")
 	{
 		play.GET("/guess/", controller.RedirectGameID)
-		play.GET("/guess/:gameID", controller.CheckGameIsValid, controller.DLEs)
+		play.GET("/guess/:gameID", controller.CheckGameIsValid, controller.SaveGuess, controller.DLEs)
 		play.GET("/mayhem/", controller.RedirectGameID)
 		play.GET("/mayhem/:gameID", controller.CheckGameIsValid, controller.MayhemDrawChampion, controller.DLEs)
 	}
