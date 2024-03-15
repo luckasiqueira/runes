@@ -10,13 +10,13 @@ Router defines all our application routes, also sets their controllers and valid
 Group allows set child routes, from a primary one
 */
 func Router(route *gin.RouterGroup) {
-	route.GET("/", controller.Index)
+	route.GET("/", controller.ServerInfo, controller.Index)
 	play := route.Group("/play")
 	{
 		play.GET("/guess/", controller.RedirectGameID)
-		play.GET("/guess/:gameID", controller.CheckGameIsValid, controller.SaveGuess, controller.DLEs)
+		play.GET("/guess/:gameID", controller.ServerInfo, controller.CheckGameIsValid, controller.SaveGuess, controller.DLEs)
 		play.GET("/mayhem/", controller.RedirectGameID)
-		play.GET("/mayhem/:gameID", controller.CheckGameIsValid, controller.MayhemDrawChampion, controller.DLEs)
+		play.GET("/mayhem/:gameID", controller.ServerInfo, controller.CheckGameIsValid, controller.MayhemDrawChampion, controller.DLEs)
 	}
 	try := route.Group("/try")
 	{
