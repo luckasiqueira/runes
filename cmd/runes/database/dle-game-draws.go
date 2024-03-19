@@ -6,6 +6,10 @@ import (
 	"runes/tools/envdata"
 )
 
+/*
+Set tables verify the current game mode to check what's Draw's related DB table to that mode
+Once evaluation is done, a that related table name is returned, to be used on DB queries
+*/
 func setTable(playingMode string) string {
 	var table string
 	if playingMode == "guess" {

@@ -10,6 +10,7 @@ import (
 
 /*
 SaveGame connects to DB to insert gameID and gameChampion (ChampionID) on it if it's not set already as evaluated in checkGameIsSet
+That func is has a similar comparison to setTable, but they are not the same, each one using different tables
 */
 func SaveGame(context *gin.Context, gameID string, championID int) {
 	db := Connect()
