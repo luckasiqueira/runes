@@ -7,21 +7,21 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
 	"log"
-	"os"
+	"runes/tools/envdata"
 	"time"
 )
 
 func Connect() *sql.DB {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Connect() -> error while loading .env file.")
+		log.Fatal("Connect() -> error while loading .envdata file.")
 	}
 	data := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",
-		os.Getenv("DB_USER"),
-		os.Getenv("DB_PASS"),
-		os.Getenv("DB_HOST"),
-		os.Getenv("DB_PORT"),
-		os.Getenv("DB_NAME"),
+		envdata.Env.DBUser,
+		envdata.Env.DBPass,
+		envdata.Env.DBHost,
+		envdata.Env.DBPort,
+		envdata.Env.DBName,
 	)
 	db, err := sql.Open("mysql", data)
 	db.SetConnMaxLifetime(time.Minute * 5)
@@ -30,19 +30,15 @@ func Connect() *sql.DB {
 
 /*
 SetTable checks the given URL Path to identify game mode.
-When game mode is identified, atributes a value set on .env file to table var, which is returned
+When game mode is identified, atributes a value set on .envdata file to table var, which is returned
 */
 func SetTable(context *gin.Context) string {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Connect() -> error while loading .env file.")
-	}
 	var table string
 	gameID := context.Param("gameID")
 	if context.Request.URL.Path == "/play/guess/"+gameID || context.Request.URL.Path == "/try/guess/"+gameID {
-		table = os.Getenv("TB_GUESS")
+		table = envdata.Env.TBGuess
 	} else if context.Request.URL.Path == "/play/mayhem/"+gameID || context.Request.URL.Path == "/try/mayhem/"+gameID {
-		table = os.Getenv("TB_MAYHEM")
+		table = envdata.Env.TBMayhem
 	}
 	return table
 }

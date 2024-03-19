@@ -2,9 +2,8 @@ package database
 
 import (
 	"fmt"
-	"github.com/joho/godotenv"
 	"log"
-	"os"
+	"runes/tools/envdata"
 )
 
 /*
@@ -28,7 +27,8 @@ func CheckChampionDrawed(draw string) ChampionLOL {
 	db := Connect()
 	var drawChampionID int
 	var drawChampion ChampionLOL
-	err := db.QueryRow("SELECT `ID` FROM `lol_Champions` WHERE NAME LIKE ?;", draw).Scan(&drawChampionID)
+	table := envdata.Env.TBChampions
+	err := db.QueryRow(fmt.Sprintf("SELECT `ID` FROM `%s` WHERE NAME LIKE ?;", table), draw).Scan(&drawChampionID)
 	if err != nil {
 		log.Fatal("CheckChampionNameByID() -> error while checking ID for the given champion name")
 	}
@@ -49,12 +49,8 @@ func CheckDailyChampion() ChampionLOL {
 	db := Connect()
 	var champion ChampionLOL
 	var dailyChampionID int
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("CheckDailyChampion() -> error while loading .env file")
-	}
-	table := os.Getenv("TB_GUESS_CHAMPION")
-	err = db.QueryRow(fmt.Sprintf("SELECT `championID` FROM %s WHERE 1;", table)).Scan(&dailyChampionID)
+	table := envdata.Env.TBGuessChampion
+	err := db.QueryRow(fmt.Sprintf("SELECT `championID` FROM %s WHERE 1;", table)).Scan(&dailyChampionID)
 	if err != nil {
 		log.Fatal("CheckDailyChampion() -> error while checking daily champion")
 	}

@@ -2,21 +2,16 @@ package database
 
 import (
 	"fmt"
-	"github.com/joho/godotenv"
 	"log"
-	"os"
+	"runes/tools/envdata"
 )
 
 func setTable(playingMode string) string {
-	errr := godotenv.Load()
-	if errr != nil {
-		log.Fatal("setTable() -> error while loading .env file")
-	}
 	var table string
 	if playingMode == "guess" {
-		table = os.Getenv("TB_GUESS_DRAWS")
+		table = envdata.Env.TBGuessDraws
 	} else if playingMode == "mayhem" {
-		table = os.Getenv("TB_MAYHEM_DRAWS")
+		table = envdata.Env.TBMayhemDraws
 	}
 	return table
 }

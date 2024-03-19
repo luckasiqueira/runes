@@ -2,12 +2,10 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
-	"log"
 	"net/http"
-	"os"
 	"runes/cmd/runes/game-modes/dle"
 	"runes/cmd/runes/routes"
+	envdata "runes/tools/envdata"
 )
 
 /*
@@ -24,12 +22,8 @@ func main() {
 	route.LoadHTMLGlob("website/*html")
 	route.StaticFS("/assets/", http.Dir("website/assets"))
 	routes.Router(&route.RouterGroup)
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("main -> error while loading .env file")
-	}
-	port := os.Getenv("SV_PORT")
-	err = route.Run(port)
+	port := envdata.Env.SVPort
+	err := route.Run(port)
 	if err != nil {
 		return
 	}

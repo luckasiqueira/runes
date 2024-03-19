@@ -27,7 +27,7 @@ var Env = envLoader()
 func envLoader() *EnvInfo {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("envLoader() -> error while loading .env file")
+		log.Fatal("envLoader() -> error while loading .envdata file")
 	}
 	e := &EnvInfo{
 		DBHost:          os.Getenv("DB_HOST"),
