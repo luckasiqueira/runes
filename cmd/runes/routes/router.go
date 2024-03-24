@@ -23,5 +23,6 @@ func Router(route *gin.RouterGroup) {
 	{
 		try.POST("/guess/:gameID", controller.DLEDraws)
 		try.POST("/mayhem/:gameID", controller.DLEDraws)
+		try.POST("/hangmman/:gameID", controller.HangmanDraws)
 	}
 }
