@@ -12,20 +12,44 @@ import (
 var HangmanChampion = &c
 var c = database.CheckHangmanChampion()
 
+type HangmanDraws struct {
+	Letter string
+	Found  bool
+}
+
 /*
 POST worker
 */
 func PlayHangman(context *gin.Context) {
-	drawLetter := strings.ToUpper(context.PostForm("draw"))
-	c := strings.ToUpper(*HangmanChampion)
-	for index, letter := range c {
-		if drawLetter == string(letter) {
+	draw := strings.ToUpper(context.PostForm("draw"))
+	champion := (*HangmanChampion)
+	gameID := context.Param("gameID")
+	database.SaveHangmanGameDraws(gameID, draw)
+	draws := database.CheckHangmanDraws(gameID)
+	for index, letter := range champion {
+		if draw == string(letter) {
 			context.HTML(http.StatusOK, "hangman-dynamics.html", gin.H{
 				"Index": index,
+				"Draws": draws,
 			})
 			break
 		}
 	}
+}
+
+func Compare(draws []string, champion []string) []HangmanDraws {
+	var gameDraws []HangmanDraws
+	for i := range draws {
+		var draw HangmanDraws
+		for j := range champion {
+			if draws[i] == champion[j] {
+				draw.Letter = champion[j]
+				draw.Found = true
+				gameDraws = append(gameDraws, draw)
+			}
+		}
+	}
+	return gameDraws
 }
 
 func DraftHangmanChampion() {
@@ -37,7 +61,7 @@ func DraftHangmanChampion() {
 		database.SaveHangmanChampion(championID)
 		for i := range *database.ChampionsList {
 			if championID == (*database.ChampionsList)[i].Champion.ID {
-				c = (*database.ChampionsList)[i].Champion.Name
+				c = append(c, (*database.ChampionsList)[i].Champion.Name)
 				break
 			}
 		}
