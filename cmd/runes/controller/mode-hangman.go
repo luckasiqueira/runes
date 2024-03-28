@@ -3,6 +3,8 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"runes/cmd/runes/database"
+	"runes/tools/envdata"
 	"strings"
 )
 
@@ -21,4 +23,11 @@ func Hangman(context *gin.Context) {
 		"Champion": champion,
 		"Alphabet": letters,
 	})
+}
+
+func SaveGameHangman(context *gin.Context) {
+	table := envdata.Env.TBHangman
+	gameID := context.Param("gameID")
+	database.SaveHangman(gameID, table)
+	context.Next()
 }
