@@ -19,6 +19,8 @@ type EnvInfo struct {
 	TBGuess         string
 	TBGuessDraws    string
 	TBGuessChampion string
+	TBHangman       string
+	TBHangmanDraws  string
 	HeaderNode      string
 }
 
@@ -29,7 +31,7 @@ func envLoader() *EnvInfo {
 	if err != nil {
 		log.Fatal("envLoader() -> error while loading .envdata file")
 	}
-	e := &EnvInfo{
+	myenv := &EnvInfo{
 		DBHost:          os.Getenv("DB_HOST"),
 		DBName:          os.Getenv("DB_NAME"),
 		DBUser:          os.Getenv("DB_USER"),
@@ -42,7 +44,9 @@ func envLoader() *EnvInfo {
 		TBGuess:         os.Getenv("TB_GUESS"),
 		TBGuessDraws:    os.Getenv("TB_GUESS_DRAWS"),
 		TBGuessChampion: os.Getenv("TB_GUESS_CHAMPION"),
+		TBHangman:       os.Getenv("TB_HANGMAN"),
+		TBHangmanDraws:  os.Getenv("TB_HANGMAN_DRAWS"),
 		HeaderNode:      os.Getenv("H_NODE"),
 	}
-	return e
+	return myenv
 }
