@@ -31,6 +31,19 @@ func SaveGame(context *gin.Context, gameID string, championID int) {
 	defer db.Close()
 }
 
+func SaveHangman(gameID, table string) {
+	db := Connect()
+	if checkGameIsSet(db, gameID, table) {
+		return
+	} else {
+		_, err := db.Exec(fmt.Sprintf("INSERT INTO `%s` (`gameID`) VALUES ('%s');", table, gameID))
+		if err != nil {
+			log.Fatal("SaveGameHangman() -> Error while saving gameID on DB \n", err)
+		}
+	}
+	defer db.Close()
+}
+
 /*
 checkGameIsSet runs a count on DB table to check is a game is not already placed on it.
 If found > 0 means that a game is already set, so we must get over this
